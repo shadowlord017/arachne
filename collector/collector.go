@@ -27,12 +27,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/uber/arachne/config"
-	"github.com/uber/arachne/defines"
-	"github.com/uber/arachne/internal/ip"
-	"github.com/uber/arachne/internal/log"
-	"github.com/uber/arachne/internal/tcp"
-	"github.com/uber/arachne/metrics"
+	"github.com/shadowlord017/arachne/config"
+	"github.com/shadowlord017/arachne/defines"
+	"github.com/shadowlord017/arachne/internal/ip"
+	"github.com/shadowlord017/arachne/internal/log"
+	"github.com/shadowlord017/arachne/internal/tcp"
+	"github.com/shadowlord017/arachne/metrics"
 
 	"github.com/fatih/color"
 	"github.com/google/gopacket/layers"

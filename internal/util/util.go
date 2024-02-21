@@ -30,9 +30,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/uber/arachne/internal/ip"
-	"github.com/uber/arachne/internal/log"
-	"github.com/uber/arachne/metrics"
+	"github.com/shadowlord017/arachne/internal/ip"
+	"github.com/shadowlord017/arachne/internal/log"
+	"github.com/shadowlord017/arachne/metrics"
 
 	"github.com/fatih/color"
 	"github.com/pkg/errors"

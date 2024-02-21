@@ -8,7 +8,7 @@ ${builddir}:
 	mkdir -p $(builddir)
 
 bins: install_ci
-	go build -o ${builddir}/arachned github.com/shadowlord017/arachne/arachned/
+	go build -o ${builddir}/arachne github.com/shadowlord017/arachne/arachned/
 
 all: bins
 
@@ -37,6 +37,5 @@ vendor: glide.lock
 install_ci:
 	glide --version || go get -u -f github.com/Masterminds/glide
 	make vendor
-	go get -u golang.org/x/lint/golint
 
 .PHONY: bins test vendor install_ci lint

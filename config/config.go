@@ -32,11 +32,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/uber/arachne/defines"
-	"github.com/uber/arachne/internal/log"
-	"github.com/uber/arachne/internal/network"
-	"github.com/uber/arachne/internal/tcp"
-	"github.com/uber/arachne/metrics"
+	"github.com/shadowlord017/arachne/defines"
+	"github.com/shadowlord017/arachne/internal/log"
+	"github.com/shadowlord017/arachne/internal/network"
+	"github.com/shadowlord017/arachne/internal/tcp"
+	"github.com/shadowlord017/arachne/metrics"
 
 	"github.com/google/gopacket/layers"
 	cli "github.com/jawher/mow.cli"

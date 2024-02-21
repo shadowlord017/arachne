@@ -27,8 +27,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/uber/arachne/defines"
-	"github.com/uber/arachne/internal/ip"
+	"github.com/shadowlord017/arachne/defines"
+	"github.com/shadowlord017/arachne/internal/ip"
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"

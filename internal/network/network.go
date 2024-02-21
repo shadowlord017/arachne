@@ -24,7 +24,7 @@ import (
 	"net"
 	"strings"
 
-	"github.com/uber/arachne/internal/log"
+	"github.com/shadowlord017/arachne/internal/log"
 
 	"github.com/miekg/dns"
 	"github.com/pkg/errors"

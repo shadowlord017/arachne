@@ -3,7 +3,7 @@ Section: utils
 Priority: optional
 Maintainer: Vasileios Lakafosis <lakafosi@uber.com>
 Standards-Version: 3.9.5
-Homepage: https://github.com/uber/arachne
+Homepage: https://github.com/shadowlord017/arachne
 Build-Depends: debhelper (>= 9),
                golang-1.7,
                git

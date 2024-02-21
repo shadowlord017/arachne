@@ -1,4 +1,4 @@
-package: github.com/uber/arachne
+package: github.com/shadowlord017/arachne
 import:
 - package: github.com/DataDog/datadog-go
   subpackages:

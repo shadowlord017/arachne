@@ -21,9 +21,9 @@
 package main
 
 import (
-	"github.com/uber/arachne"
-	"github.com/uber/arachne/config"
-	"github.com/uber/arachne/metrics"
+	"github.com/shadowlord017/arachne"
+	"github.com/shadowlord017/arachne/config"
+	"github.com/shadowlord017/arachne/metrics"
 )
 
 func main() {

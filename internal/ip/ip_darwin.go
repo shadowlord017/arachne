@@ -23,7 +23,7 @@ package ip
 import (
 	"net"
 
-	"github.com/uber/arachne/defines"
+	"github.com/shadowlord017/arachne/defines"
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"

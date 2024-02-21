@@ -82,10 +82,10 @@ number of packets must be inspected.
 Released under the [MIT License](LICENSE.md).
 
 
-[doc-img]: https://godoc.org/github.com/uber/arachne?status.svg
-[doc]: https://godoc.org/github.com/uber/arachne
+[doc-img]: https://godoc.org/github.com/shadowlord017/arachne?status.svg
+[doc]: https://godoc.org/github.com/shadowlord017/arachne
 [ci-img]: https://travis-ci.org/uber/arachne.svg?branch=master
 [ci]: https://travis-ci.org/uber/arachne
 [capabilities]: http://linux.die.net/man/7/capabilities
-[gorep-img]: https://goreportcard.com/badge/github.com/uber/arachne
-[gorep]: https://goreportcard.com/report/github.com/uber/arachne
+[gorep-img]: https://goreportcard.com/badge/github.com/shadowlord017/arachne
+[gorep]: https://goreportcard.com/report/github.com/shadowlord017/arachne

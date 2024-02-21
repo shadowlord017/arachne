@@ -26,9 +26,9 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/uber/arachne/defines"
-	"github.com/uber/arachne/internal/log"
-	"github.com/uber/arachne/internal/util"
+	"github.com/shadowlord017/arachne/defines"
+	"github.com/shadowlord017/arachne/internal/log"
+	"github.com/shadowlord017/arachne/internal/util"
 
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"

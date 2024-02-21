@@ -20,7 +20,7 @@
 
 package arachne
 
-import "github.com/uber/arachne/config"
+import "github.com/shadowlord017/arachne/config"
 
 // Option wraps a function to configure GlobalConfig.
 type Option func(*config.Global) Option

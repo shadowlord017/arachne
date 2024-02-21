@@ -26,13 +26,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/uber/arachne/collector"
-	"github.com/uber/arachne/config"
-	d "github.com/uber/arachne/defines"
-	"github.com/uber/arachne/internal/ip"
-	"github.com/uber/arachne/internal/log"
-	"github.com/uber/arachne/internal/tcp"
-	"github.com/uber/arachne/internal/util"
+	"github.com/shadowlord017/arachne/collector"
+	"github.com/shadowlord017/arachne/config"
+	d "github.com/shadowlord017/arachne/defines"
+	"github.com/shadowlord017/arachne/internal/ip"
+	"github.com/shadowlord017/arachne/internal/log"
+	"github.com/shadowlord017/arachne/internal/tcp"
+	"github.com/shadowlord017/arachne/internal/util"
 
 	"go.uber.org/zap"
 )
