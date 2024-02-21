@@ -55,6 +55,10 @@ func GetSourceAddr(
 
 	// Source address is specified
 	if srcAddr != "" {
+		addr := net.ParseIP(srcAddr)
+		if addr != nil {
+			return &addr, nil
+		}
 		return resolveHost(af, hostname, logger)
 	}
 	// Interface name is specified
@@ -66,7 +70,7 @@ func GetSourceAddr(
 }
 
 // Resolve given domain hostname/address in the given address family.
-//TODO replace with net.LookupHost?
+// TODO replace with net.LookupHost?
 func resolveHost(af string, hostname string, logger *log.Logger) (*net.IP, error) {
 	addr, err := net.ResolveIPAddr(af, hostname)
 	if err != nil {
