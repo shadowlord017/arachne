@@ -56,6 +56,7 @@ func GetSourceAddr(
 	// Source address is specified
 	if srcAddr != "" {
 		addr := net.ParseIP(srcAddr)
+		logger.Debug("Arachne agent's source IP address from config", zap.Any("address", addr))
 		if addr != nil {
 			return &addr, nil
 		}
