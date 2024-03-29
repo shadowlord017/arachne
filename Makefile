@@ -36,6 +36,7 @@ vendor: glide.lock
 
 install_ci:
 	glide --version || go get -u -f github.com/Masterminds/glide
-	make vendor
+#	make vendor
+#	go get -u golang.org/x/lint/golint
 
 .PHONY: bins test vendor install_ci lint

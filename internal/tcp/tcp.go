@@ -218,7 +218,7 @@ func makePkt(
 }
 
 // Receiver checks if the incoming packet is actually a response to our probe and acts accordingly.
-//TODO Test IPv6
+// TODO Test IPv6
 func Receiver(
 	conn *ip.Conn,
 	sentC chan Message,
@@ -263,7 +263,8 @@ func Receiver(
 				logger.Debug("Received",
 					zap.String("flag", "SYN"),
 					zap.Stringer("src_address", srcIP),
-					zap.Any("src_port", tcpHeader.SrcPort))
+					zap.Any("src_port", tcpHeader.SrcPort),
+					zap.Any("dst_port", tcpHeader.DstPort))
 
 				// Replying with SYN+ACK to Arachne agent
 				srcPortRange := PortRange{tcpHeader.SrcPort, tcpHeader.SrcPort}
@@ -281,7 +282,8 @@ func Receiver(
 				logger.Debug("Received",
 					zap.String("flag", "SYN ACK"),
 					zap.Stringer("src_address", srcIP),
-					zap.Any("src_port", tcpHeader.SrcPort))
+					zap.Any("src_port", tcpHeader.SrcPort),
+					zap.Any("dst_port", tcpHeader.DstPort))
 
 				inMsg := Message{
 					Type:    EchoReply,
@@ -304,11 +306,11 @@ func Receiver(
 				if inMsg.FromExternalTarget(conn.ListenPort) {
 					//TODO verify
 					// Replying with RST only to external target
-					srcPortRange := PortRange{tcpHeader.SrcPort, tcpHeader.SrcPort}
+					srcPortRange := PortRange{tcpHeader.DstPort, tcpHeader.DstPort}
 					seqNum := tcpHeader.Ack
 					ackNum := tcpHeader.Seq + 1
 					flags := tcpFlags{rst: true}
-					err = send(conn, &srcIP, defines.PortHTTPS, srcPortRange,
+					err = send(conn, &srcIP, tcpHeader.SrcPort, srcPortRange,
 						ip.DSCPBeLow, flags, seqNum, ackNum, sentC, kill, logger)
 					if err != nil {
 						logger.Error("failed to send RST", zap.Error(err))
@@ -429,13 +431,18 @@ func echoTargetsWorker(
 		}
 		dstAddr := net.IP(remoteStruct.FieldByName("IP").Bytes())
 		ext := remoteStruct.FieldByName("External").Bool()
+		dstPortValue := remoteStruct.FieldByName("TargetTCPPort")
+		dstPort := layers.TCPPort(defines.PortHTTPS)
+		if dstPortValue != (reflect.Value{}) {
+			dstPort = layers.TCPPort(dstPortValue.Uint())
+		}
 
 		// Send SYN with random SEQ
 		flags := tcpFlags{syn: true}
 		port := targetPort
 		qos := DSCPv
 		if ext {
-			port = defines.PortHTTPS
+			port = dstPort
 			qos = ip.DSCPBeLow
 		}
 		if err := send(conn, &dstAddr, port, srcPortRange, qos,
@@ -455,7 +462,7 @@ func echoTargetsWorker(
 
 // Sender generates TCP packet probes with given TTL at given packet per second rate.
 // The packet are injected into raw socket and their descriptions are published to the output channel as Probe messages.
-//TODO Test IPv6
+// TODO Test IPv6
 func send(
 	conn *ip.Conn,
 	dstAddr *net.IP,
