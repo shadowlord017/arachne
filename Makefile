@@ -8,7 +8,7 @@ ${builddir}:
 	mkdir -p $(builddir)
 
 bins: install_ci
-	go build -o ${builddir}/arachne github.com/shadowlord017/arachne/arachned/
+	go build -o ${builddir}/arachne ./arachned/
 
 all: bins
 
