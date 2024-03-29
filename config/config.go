@@ -79,17 +79,19 @@ type RemoteStore map[string]Remote
 
 // Remote holds the info for every target to be echoed.
 type Remote struct {
-	IP       net.IP
-	AF       string
-	Hostname string
-	Location string
-	External bool
+	IP            net.IP
+	AF            string
+	Hostname      string
+	Location      string
+	External      bool
+	TargetTCPPort layers.TCPPort
 }
 
 type target struct {
-	HostName string `json:"host_name"`
-	IP       string `json:"ip"`
-	Location string
+	HostName      string `json:"host_name"`
+	IP            string `json:"ip"`
+	Location      string
+	TargetTCPPort layers.TCPPort `json:"port,omitempty"`
 }
 
 // RemoteFileConfig needed for the JSON decoder to know which fields to expect and parse.
@@ -163,7 +165,7 @@ type Global struct {
 }
 
 func localFileReadable(path string) error {
-	if _, err := ioutil.ReadFile(path); err != nil {
+	if _, err := os.ReadFile(path); err != nil {
 		return err
 	}
 	return nil
@@ -300,7 +302,7 @@ func FetchRemoteList(
 		}
 		logger.Info("Configuration file", zap.String("file", gl.App.StandaloneTargetConfig))
 
-		raw, err := ioutil.ReadFile(gl.App.StandaloneTargetConfig)
+		raw, err := os.ReadFile(gl.App.StandaloneTargetConfig)
 		if err != nil {
 			return errors.Wrap(err, "file error")
 		}
@@ -591,6 +593,11 @@ func walkTargets(grc *RemoteConfig, ts []target, ext bool, remotes RemoteStore, 
 			t.IP = addrs[0]
 		}
 
+		port := layers.TCPPort(defines.PortHTTPS)
+		if t.TargetTCPPort != 0 {
+			port = layers.TCPPort(t.TargetTCPPort)
+		}
+
 		// Validate address string
 		currIP := net.ParseIP(t.IP)
 		if currIP == nil {
@@ -605,7 +612,7 @@ func walkTargets(grc *RemoteConfig, ts []target, ext bool, remotes RemoteStore, 
 			continue
 		}
 		remotes[currIP.String()] = Remote{currIP, network.Family(&currIP),
-			t.HostName, t.Location, ext}
+			t.HostName, t.Location, ext, port}
 	}
 }
 
@@ -652,7 +659,7 @@ func ResolveDNSTargets(
 
 				currIP := net.ParseIP(addressKey)
 				remotes[addressKey] = Remote{currIP, network.Family(&currIP), hostname,
-					remotes[addressKey].Location, remotes[addressKey].External,
+					remotes[addressKey].Location, remotes[addressKey].External, defines.PortHTTPS,
 				}
 			}
 			wg.Done()

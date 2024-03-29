@@ -214,13 +214,14 @@ func getSendSocket(af int) (int, error) {
 	return fd, nil
 }
 
-func getBPFFilter(ipHeaderOffset uint32, listenPort uint32) ([]bpf.RawInstruction, error) {
+func getBPFFilter(ipHeaderOffset uint32, listenPort uint32, srcPort uint32) ([]bpf.RawInstruction, error) {
 	// The Arachne BPF Filter reads values starting from the TCP Header by adding ipHeaderOffset to all
 	// offsets. It filters for packets of destination port equal to listenPort, or src port equal to HTTP or HTTPS ports
 	// and for packets containing a TCP SYN flag (SYN, or SYN+ACK packets)
 	return bpf.Assemble([]bpf.Instruction{
 		bpf.LoadAbsolute{Off: ipHeaderOffset + 2, Size: 2},              // Starting from TCP Header, load DstPort (2nd word)
-		bpf.JumpIf{Cond: bpf.JumpEqual, Val: listenPort, SkipTrue: 3},   // Return packet if DstPort is listen Port
+		bpf.JumpIf{Cond: bpf.JumpEqual, Val: listenPort, SkipTrue: 4},   // Return packet if DstPort is listen Port
+		bpf.JumpIf{Cond: bpf.JumpEqual, Val: srcPort, SkipTrue: 3},      // Return packet if DstPort is source Port
 		bpf.LoadAbsolute{Off: ipHeaderOffset, Size: 2},                  // Starting from TCP Header, load SrcPort (1st word)
 		bpf.JumpIf{Cond: bpf.JumpEqual, Val: d.PortHTTP, SkipTrue: 1},   // Return packet if SrcPort is HTTP Port
 		bpf.JumpIf{Cond: bpf.JumpEqual, Val: d.PortHTTPS, SkipFalse: 2}, // Discard packet if not HTTPS
@@ -231,7 +232,7 @@ func getBPFFilter(ipHeaderOffset uint32, listenPort uint32) ([]bpf.RawInstructio
 	})
 }
 
-func getRecvSource(af int, listenPort layers.TCPPort, intf string, logger *log.Logger) (recvSource, error) {
+func getRecvSource(af int, listenPort layers.TCPPort, srcPort layers.TCPPort, intf string, logger *log.Logger) (recvSource, error) {
 	var (
 		rs             recvSource
 		ipHeaderOffset uint32
@@ -255,7 +256,7 @@ func getRecvSource(af int, listenPort layers.TCPPort, intf string, logger *log.L
 		ipHeaderOffset = d.IPv6HeaderLength
 	}
 
-	filter, err := getBPFFilter(ipHeaderOffset, uint32(listenPort))
+	filter, err := getBPFFilter(ipHeaderOffset, uint32(listenPort), uint32(srcPort))
 	if err != nil {
 		logger.Warn("Failed to compile BPF Filter", zap.Error(err))
 		return rs, nil
@@ -272,7 +273,7 @@ func getRecvSource(af int, listenPort layers.TCPPort, intf string, logger *log.L
 }
 
 // NewConn returns a raw socket connection to send and receive packets.
-func NewConn(af int, listenPort layers.TCPPort, intf string, srcAddr net.IP, logger *log.Logger) *Conn {
+func NewConn(af int, listenPort layers.TCPPort, srcPort layers.TCPPort, intf string, srcAddr net.IP, logger *log.Logger) *Conn {
 	fdSend, err := getSendSocket(af)
 	if err != nil {
 		logger.Fatal("Error creating send socket",
@@ -280,7 +281,7 @@ func NewConn(af int, listenPort layers.TCPPort, intf string, srcAddr net.IP, log
 			zap.Error(err))
 	}
 
-	rs, err := getRecvSource(af, listenPort, intf, logger)
+	rs, err := getRecvSource(af, listenPort, srcPort, intf, logger)
 	if err != nil {
 		logger.Fatal("Error creating recv source",
 			zap.Any("listenPort", listenPort),

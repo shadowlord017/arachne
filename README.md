@@ -89,3 +89,8 @@ Released under the [MIT License](LICENSE.md).
 [capabilities]: http://linux.die.net/man/7/capabilities
 [gorep-img]: https://goreportcard.com/badge/github.com/shadowlord017/arachne
 [gorep]: https://goreportcard.com/report/github.com/shadowlord017/arachne
+
+
+## Build
+
+env GOOS=linux GOARCH=amd64 go build -o build/arachne_amd64 arachned/main.go

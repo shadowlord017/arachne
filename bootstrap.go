@@ -141,6 +141,7 @@ func Run(ec *config.Extended, opts ...Option) {
 			connIPv4 = ip.NewConn(
 				d.AfInet,
 				gl.RemoteConfig.TargetTCPPort,
+				gl.RemoteConfig.SrcTCPPortRange[0],
 				gl.RemoteConfig.InterfaceName,
 				gl.RemoteConfig.SrcAddress,
 				logger)
