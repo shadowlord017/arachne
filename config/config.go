@@ -584,7 +584,7 @@ func readRemoteList(
 func walkTargets(grc *RemoteConfig, ts []target, ext bool, remotes RemoteStore, logger *log.Logger) {
 
 	for _, t := range ts {
-		if grc.ResolveDNS && t.HostName != "" {
+		if (grc.ResolveDNS || ext) && t.HostName != "" {
 			addrs, err := net.LookupHost(t.HostName)
 			if err != nil {
 				logger.Error("failed to DNS resolve hostname", zap.Error(err))
